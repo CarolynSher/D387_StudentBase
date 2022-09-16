@@ -1,7 +1,7 @@
 package edu.wgu.d387_sample_code.rest;
 
 
-import edu.wgu.d387_sample_code.convertor.RoomEntityToReservableRoomResponseConverter;
+import edu.wgu.d387_sample_code.convertor.*;
 import edu.wgu.d387_sample_code.entity.ReservationEntity;
 import edu.wgu.d387_sample_code.entity.RoomEntity;
 import edu.wgu.d387_sample_code.model.request.ReservationRequest;
@@ -11,6 +11,7 @@ import edu.wgu.d387_sample_code.repository.PageableRoomRepository;
 import edu.wgu.d387_sample_code.repository.ReservationRepository;
 import edu.wgu.d387_sample_code.repository.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -33,7 +35,11 @@ import java.util.Optional;
 @RestController
 @RequestMapping(ResourceConstants.ROOM_RESERVATION_V1)
 @CrossOrigin
+@EnableWebMvc
 public class ReservationResource {
+
+    @Autowired
+    ApplicationContext context;
 
         @Autowired
         PageableRoomRepository pageableRoomRepository;
@@ -92,7 +98,8 @@ public class ReservationResource {
 
             ReservationEntity reservationEntity = conversionService.convert(reservationRequest, ReservationEntity.class);
             reservationRepository.save(reservationEntity);
-
+        ReservationService repository=context.getBean(ReservationServiceImpl.class);
+            reservationEntity=repository.findLast();
         Optional<RoomEntity> result  = roomRepository.findById(reservationRequest.getRoomId());
         RoomEntity roomEntity= null;
 
@@ -114,6 +121,7 @@ public class ReservationResource {
 
 
             return new ResponseEntity<>(reservationResponse, HttpStatus.CREATED);
+       // return new ResponseEntity<>(new ReservationResponse(), HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE,

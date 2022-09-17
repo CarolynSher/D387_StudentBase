@@ -3,6 +3,8 @@ package edu.wgu.d387_sample_code.convertor;
 import edu.wgu.d387_sample_code.entity.ReservationEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Project: D387 sample code
  * Package: edu.wgu.d387_sample_code.convertor
@@ -17,4 +19,5 @@ import org.springframework.stereotype.Service;
 
 public interface ReservationService {
     public ReservationEntity findLast();
+    public List<ReservationEntity> findAll();
 }

@@ -49,5 +49,10 @@ public class RoomServiceImpl implements RoomService{
 
     }
 
+    @Override
+    public List<RoomEntity> findAll() {
+        return (List<RoomEntity>)roomRepository.findAll();
+    }
+
 
 }
